@@ -64,8 +64,8 @@ feature if necessary.
 [GNU GPLv3](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## References
-[1] C. Enz, F. Chicco and A. Pezzotta, "Nanoscale MOSFET Modeling: Part 1: The Simplified EKV Model for the Design of Low-Power Analog Circuits," in IEEE Solid-State Circuits Magazine, vol. 9, no. 3, pp. 26-35, Summer 2017, doi: 10.1109/MSSC.2017.2712318.
-[2] C. Enz, F. Chicco and A. Pezzotta, "Nanoscale MOSFET Modeling: Part 2: Using the Inversion Coefficient as the Primary Design Parameter," in IEEE Solid-State Circuits Magazine, vol. 9, no. 4, pp. 73-81, Fall 2017, doi: 10.1109/MSSC.2017.2745838.
-[3] https://github.com/gmagno/spyci
-[4] https://github.com/sobremesa87/spyci
-[5] https://github.com/google/skywater-pdk
+[1] C. Enz, F. Chicco and A. Pezzotta, "Nanoscale MOSFET Modeling: Part 1: The Simplified EKV Model for the Design of Low-Power Analog Circuits," in IEEE Solid-State Circuits Magazine, vol. 9, no. 3, pp. 26-35, Summer 2017, doi: 10.1109/MSSC.2017.2712318.  
+[2] C. Enz, F. Chicco and A. Pezzotta, "Nanoscale MOSFET Modeling: Part 2: Using the Inversion Coefficient as the Primary Design Parameter," in IEEE Solid-State Circuits Magazine, vol. 9, no. 4, pp. 73-81, Fall 2017, doi: 10.1109/MSSC.2017.2745838.  
+[3] https://github.com/gmagno/spyci  
+[4] https://github.com/sobremesa87/spyci  
+[5] https://github.com/google/skywater-pdk  
