@@ -1,0 +1,16 @@
+LICENCE
+MANIFEST.in
+README.md
+pyproject.toml
+setup.cfg
+src/iCHIP/__init__.py
+src/iCHIP/characterisation.py
+src/iCHIP.egg-info/PKG-INFO
+src/iCHIP.egg-info/SOURCES.txt
+src/iCHIP.egg-info/dependency_links.txt
+src/iCHIP.egg-info/requires.txt
+src/iCHIP.egg-info/top_level.txt
+src/iCHIP/resources/report_template.txt
+src/iCHIP/tests/__init__.py
+src/iCHIP/tests/test_char_SKYN.py
+src/iCHIP/tests/test_char_SKYP.py
