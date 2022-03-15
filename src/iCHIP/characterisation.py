@@ -13,6 +13,7 @@ from spyci import spyci
 import pandas as pd
 from scipy.signal import find_peaks
 import traceback
+from scipy.signal import argrelextrema
 
 class ng_data:
 
@@ -244,28 +245,28 @@ class MOS:
             # Find the lower limit of good data (based on variance). Data is sometimes
             # very noisy for very low currents and this produces poor results.
             gm_over_Id_series = pd.Series(gm_over_Id)
-            gm_over_Id_series_std = gm_over_Id_series.rolling(window=int(0.05*len(gm_over_Id))).std()
-            gm_over_Id_series_std = gm_over_Id_series_std/np.median(gm_over_Id)
-            diff_tuple = tuple(zip(Ids_vgs_x,gm_over_Id_series_std))
-            valid_lim_voltage = np.min([item[0] for item in diff_tuple if item[1] < 0.1])
-            valid_lim_index = Ids_vgs_x.index(valid_lim_voltage)
+            gm_over_Id_series_std = gm_over_Id_series.rolling(window=5).std()
 
-            diff_data = np.diff(gm_over_Id) / np.diff(Ids_vgs_x[1:])
-            diff_data_neg = -1 * np.diff(gm_over_Id) / np.diff(Ids_vgs_x[1:])
+            # This code finds the first time the standard deviation dips below the
+            # average st dev after rising above it. The standard deviation always peaks
+            # then falls, so this helps to exclude erroneous data at the start if the model
+            # is of poor quality.
+            gm_over_Id_series_std_av = np.mean(gm_over_Id_series_std)
+            gm_over_Id_series_std_belowav = [list(gm_over_Id_series_std).index(item) for item in gm_over_Id_series_std if item < gm_over_Id_series_std_av]
+            gm_over_Id_series_std_aboveav = [list(gm_over_Id_series_std).index(item) for item in gm_over_Id_series_std if item > gm_over_Id_series_std_av]
+            gm_over_Id_series_std_valid = [item for item in gm_over_Id_series_std_belowav if item > gm_over_Id_series_std_aboveav[0]]
+            valid_lim_index = gm_over_Id_series_std_valid[0]
 
-            peaks, _ = find_peaks(diff_data,height=-10)
-            peaks_neg, _ = find_peaks(diff_data_neg,height=-10)
+            fig_gm_over_id_std_dev = plt.figure()
+            plt.plot(Ids_vgs_x[:-1],[gm_over_Id_series_std_av]*len(Ids_vgs_x[:-1]))
+            plt.plot(Ids_vgs_x[:-1],gm_over_Id_series_std)
+            plt.plot(Ids_vgs_x[valid_lim_index],gm_over_Id_series_std[valid_lim_index],'o')
+            plt.title ("gm/Id Standard Deviation vs. Vgs for Data Quality Determination")
+            plt.xlabel("Vgs (V)")
+            plt.ylabel("gm/Id St. Dev")
 
-            peaks_total = (list(peaks)+list(peaks_neg))
-            peaks_total.sort()
-
-            #ispec_index = peaks_total[-3]
-
-            # Uncomment to see the peaks that are being selected. Use to debug.
-            #plt.plot(Ids_vgs_x[2:],diff_data)
-            #plt.plot([Ids_vgs_x[i] for i in peaks],diff_data[peaks],'o')
-            #plt.plot([Ids_vgs_x[i] for i in peaks_neg],diff_data[peaks_neg],'o')
-            #plt.show()
+            # Add resulting plot as a tab
+            web_content.append(["GmIdStdDev", "Data Quality", mpld3.fig_to_html(fig_gm_over_id_std_dev)])
 
             # Plot gm/Id
             fig_gm_over_id = plt.figure()
@@ -301,6 +302,7 @@ class MOS:
 
         except Exception as e:
             web_content.append(["GmId", "Gm/Id", "FAILED TO GENERATE"+str(e)])
+            print(e)
 
         # Extract n, Ispec and plot
         try:
@@ -427,7 +429,7 @@ class MOS:
             gds = np.diff(Ids_vds_y_long)/np.diff(Ids_vds_x)
 
             # Calculate sigma_d
-            self.sigma_d = gds[0]*self.Ut*self.n_short/Ids_vds_x[0]
+            self.sigma_d = gds[0]*self.Ut*self.n_short/(0.5*(Ids_vds_x[1]-Ids_vds_x[0]))
 
             # Plot gds vs. Vds
             fig_gds = plt.figure()
@@ -598,21 +600,30 @@ if (__name__ == '__main__'):
     mode = "CSV"
 
     # Select the type you wish to characterise
-    type = 'NMOS'   # NMOS or PMOS
+    type = 'PMOS'   # NMOS or PMOS
     foundry = 'skywater'
-    flavour = '_lvt'    # i.e. _lvt, _hvt, etc, etc. For the standard vt, use ''
+    flavour = ''    # i.e. _lvt, _hvt, etc, etc. For the standard vt, use ''
+    voltage = '5V'
 
-    if type == 'PMOS':
-        length_short = 0.35
-    else:
-        length_short = 0.15
+    # Set the lengths to match the tests
+    if voltage == '3V':
+        if type == 'PMOS':
+            length_short = 0.35
+        else:
+            length_short = 0.15
+
+    elif voltage =='5V':
+        if type == 'PMOS':
+            length_short = 0.5
+        else:
+            length_short = 2.0
 
     device = type[0].lower() + str(flavour)
 
     # Set variables to read
     base_path = (Path(__file__).parents[0])
-    filepath_vds = os.path.join(base_path,'tests','test_data',str(foundry)+'_char_'+str(type)+'_vds.raw')  # Vds data path
-    filepath_vgs = os.path.join(base_path,'tests','test_data',str(foundry)+'_char_'+str(type)+'_vgs.raw')  # Vgs data path
+    filepath_vds = os.path.join(base_path,'tests','test_data',str(foundry)+'_char_'+str(type)+'_'+str(voltage)+'_vds.raw')  # Vds data path
+    filepath_vgs = os.path.join(base_path,'tests','test_data',str(foundry)+'_char_'+str(type)+'_'+str(voltage)+'_vgs.raw')  # Vgs data path
 
     char_data = ng_data(filepath_vds,filepath_vgs)
     trace_names = char_data.get_trace_names()
@@ -641,6 +652,6 @@ if (__name__ == '__main__'):
     print("--------------------------")
     print("----- IC Parameters ------")
     print("--------------------------")
-    output_file = os.path.join(Path(__file__).parents[2],"outputs","summary_"+str(foundry)+"_"+str(type)+'_'+str(device)+".html")
+    output_file = os.path.join(Path(__file__).parents[2],"outputs","summary_"+str(foundry)+"_"+str(type)+'_'+str(voltage)+'_'+str(device)+".html")
     params_n = MOS(vgs_data, vds_data, 300, 10, 2, 10, length_short,output_file=output_file, delim='\t').get_params()
     print(params_n)
