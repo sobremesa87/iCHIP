@@ -6,8 +6,8 @@ def test_char(tmpdir):
 
     # Set variables to read
     base_path = (Path(__file__).parents[1])
-    filepath_vds = os.path.join(base_path,'tests','test_data','skywater_char_NMOS_vds.raw')  # Vds data path
-    filepath_vgs = os.path.join(base_path,'tests','test_data','skywater_char_NMOS_vgs.raw')  # Vgs data path
+    filepath_vds = os.path.join(base_path,'tests','test_data','skywater_char_NMOS_3V_vds.raw')  # Vds data path
+    filepath_vgs = os.path.join(base_path,'tests','test_data','skywater_char_NMOS_3V_vgs.raw')  # Vgs data path
 
     char_data = characterisation.ng_data(filepath_vds,filepath_vgs)
     trace_names = char_data.get_trace_names()
@@ -28,12 +28,12 @@ def test_char(tmpdir):
     params_n = characterisation.MOS(vgs_data, vds_data, 300, 10, 2, 10, 0.15,output_file=tmpdir.join("summary_dom.html"), delim='\t').get_params()
 
     # Store correct parameters
-    parameters = (1.6505308962852658, 3.2487425928800057e-06, 0.002829670019578733, 0.05642443766987942, 0.5394141464229076, 1.0654344282590634e-07)
+    parameters = (1.6505308962852658, 3.17056116525344e-06, 0.011318680078314934, 0.055066575985261705, 0.5394141464229076, 1.0397946053854577e-07)
 
     # Check parameters
     assert(params_n,parameters)
 
     # Check output HTML file
     output_html = open(tmpdir.join("summary_dom.html"), 'r')
-    correct_html = open(os.path.join(base_path,'tests','test_data','summary_skywater_NMOS_n.html'),'r')
+    correct_html = open(os.path.join(base_path,'tests','test_data','summary_skywater_NMOS_3V_n.html'),'r')
     assert(output_html,correct_html)

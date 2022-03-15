@@ -600,10 +600,10 @@ if (__name__ == '__main__'):
     mode = "CSV"
 
     # Select the type you wish to characterise
-    type = 'PMOS'   # NMOS or PMOS
+    type = 'NMOS'   # NMOS or PMOS
     foundry = 'skywater'
     flavour = ''    # i.e. _lvt, _hvt, etc, etc. For the standard vt, use ''
-    voltage = '5V'
+    voltage = '3V'
 
     # Set the lengths to match the tests
     if voltage == '3V':
