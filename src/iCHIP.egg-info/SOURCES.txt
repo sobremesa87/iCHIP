@@ -10,9 +10,13 @@ src/iCHIP.egg-info/SOURCES.txt
 src/iCHIP.egg-info/dependency_links.txt
 src/iCHIP.egg-info/requires.txt
 src/iCHIP.egg-info/top_level.txt
+src/iCHIP/resources/char_schem_NMOS_vds.sch
+src/iCHIP/resources/char_schem_NMOS_vgs.sch
+src/iCHIP/resources/char_schem_PMOS_vds.sch
+src/iCHIP/resources/char_schem_PMOS_vgs.sch
 src/iCHIP/resources/report_template.txt
 src/iCHIP/tests/__init__.py
-src/iCHIP/tests/test_char_SKY_N3.py
+src/iCHIP/tests/test_char_SKY_N18.py
 src/iCHIP/tests/test_char_SKY_N5.py
-src/iCHIP/tests/test_char_SKY_P3.py
+src/iCHIP/tests/test_char_SKY_P18.py
 src/iCHIP/tests/test_char_SKY_P5.py

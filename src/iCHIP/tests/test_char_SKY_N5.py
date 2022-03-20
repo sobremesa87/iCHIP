@@ -25,10 +25,10 @@ def test_char(tmpdir):
     vds_data = list(zip(v,i_long,i_short))
 
     # Run characterisation
-    params_n = characterisation.MOS(vgs_data, vds_data, 300, 10, 2, 10, 0.5,output_file=tmpdir.join("summary_dom.html"), delim='\t').get_params()
+    params_n = characterisation.MOS(vgs_data, vds_data, 300, 50, 2, 50, 0.5,output_file=tmpdir.join("summary_dom.html"), delim='\t').get_params()
 
     # Store correct parameters
-    parameters = (2.281016829049344, 1.9375607776957512e-05, 0.04332317944534455, 0.003573302448059258, 0.7627638368901664, 3.9482935585242906e-07)
+    parameters = (1.7070431573880949, 1.150325954036616e-06, 0.04332317944534455, 0.001060731254199301, 0.7649502650393638, 1.1720469899083568e-07)
 
     # Check parameters
     assert(params_n,parameters)

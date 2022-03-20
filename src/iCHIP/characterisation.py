@@ -606,13 +606,19 @@ if (__name__ == '__main__'):
     voltage = '5V'
 
     # Set the lengths to match the tests
-    if voltage == '3V':
+    if voltage == '1V8':
+
+        width = 10
+
         if type == 'PMOS':
             length_short = 0.35
         else:
             length_short = 0.15
 
     elif voltage =='5V':
+
+        width = 50
+
         if type == 'PMOS':
             length_short = 0.5
         else:
@@ -653,5 +659,5 @@ if (__name__ == '__main__'):
     print("----- IC Parameters ------")
     print("--------------------------")
     output_file = os.path.join(Path(__file__).parents[2],"outputs","summary_"+str(foundry)+"_"+str(type)+'_'+str(voltage)+'_'+str(device)+".html")
-    params_n = MOS(vgs_data, vds_data, 300, 10, 2, 10, length_short,output_file=output_file, delim='\t').get_params()
+    params_n = MOS(vgs_data, vds_data, 300, width, 2, width, length_short,output_file=output_file, delim='\t').get_params()
     print(params_n)
