@@ -600,7 +600,7 @@ if (__name__ == '__main__'):
     mode = "CSV"
 
     # Select the type you wish to characterise
-    type = 'PMOS'   # NMOS or PMOS
+    type = 'NMOS'   # NMOS or PMOS
     foundry = 'skywater'
     flavour = ''    # i.e. _lvt, _hvt, etc, etc. For the standard vt, use ''
     voltage = '5V'
@@ -622,7 +622,7 @@ if (__name__ == '__main__'):
         if type == 'PMOS':
             length_short = 0.5
         else:
-            length_short = 2.0
+            length_short = 5.0
 
     device = type[0].lower() + str(flavour)
 
